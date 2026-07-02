@@ -54,9 +54,9 @@ fi
 
 LAST=$(cat "$STATE" 2>/dev/null)
 if [ "$IP" = "$LAST" ] && [ "$1" != "--force" ]; then
-    # LOG_CHECKS=yes (default) writes one line per check even when nothing
-    # changed; set LOG_CHECKS=no in the config for update/error logging only.
-    if [ "${LOG_CHECKS:-yes}" = "yes" ]; then
+    # Quiet by default: unchanged IP leaves no log line. Set LOG_CHECKS=yes
+    # in the config to log every check as a heartbeat.
+    if [ "${LOG_CHECKS:-no}" = "yes" ]; then
         log "check: public IP $IP unchanged, nothing to do"
     fi
     exit 0

@@ -3,7 +3,7 @@
 # Usage: ./build.sh [version]   (default 1.0.0)
 set -e
 
-VERSION="${1:-1.2.0}"
+VERSION="${1:-1.3.0}"
 SRC="$(cd "$(dirname "$0")" && pwd)"
 OUT="$SRC/dist"
 STAGE="$OUT/stage"

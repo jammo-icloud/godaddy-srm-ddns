@@ -20,5 +20,5 @@ TTL=600
 # How often (seconds) the daemon checks whether the public IP changed.
 CHECK_INTERVAL=300
 
-# Log every check ("yes"), or only updates and errors ("no").
-LOG_CHECKS="yes"
+# Log only changes and errors ("no", default), or every check ("yes").
+LOG_CHECKS="no"

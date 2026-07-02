@@ -25,7 +25,7 @@ DOMAIN="$wizard_domain"
 RECORDS="${wizard_records:-@}"
 TTL=600
 CHECK_INTERVAL=300
-LOG_CHECKS="yes"
+LOG_CHECKS="no"
 EOF
 elif [ ! -f "$CONF" ]; then
     cp "$PKG_DIR/etc/godaddy-ddns.conf.default" "$CONF"
