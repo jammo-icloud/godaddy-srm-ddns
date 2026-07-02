@@ -2,9 +2,14 @@
 
 PKG_DIR="/var/packages/godaddy-ddns/target"
 PIDFILE="$PKG_DIR/var/godaddy-ddnsd.pid"
+LOG="$PKG_DIR/var/godaddy-ddns.log"
 
 daemon_running() {
     [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null
+}
+
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') $*" >> "$LOG"
 }
 
 case "$1" in
@@ -15,12 +20,14 @@ case "$1" in
         mkdir -p "$PKG_DIR/var"
         "$PKG_DIR/bin/godaddy-ddnsd.sh" >/dev/null 2>&1 &
         echo $! > "$PIDFILE"
+        log "daemon started (pid $!)"
         exit 0
         ;;
     stop)
         if [ -f "$PIDFILE" ]; then
             kill "$(cat "$PIDFILE")" 2>/dev/null
             rm -f "$PIDFILE"
+            log "daemon stopped"
         fi
         exit 0
         ;;

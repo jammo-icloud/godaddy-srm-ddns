@@ -13,8 +13,10 @@ WRX560, any model — the package is `noarch` shell script only).
 - If the IP changed since the last successful update, it `PUT`s the new IP to
   the GoDaddy API for each configured record:
   `PUT https://api.godaddy.com/v1/domains/<domain>/records/A/<name>`
-- Logs to `/var/packages/godaddy-ddns/target/var/godaddy-ddns.log`
-  (auto-rotated at 256 KB).
+- Logs every check, update, error, and daemon start/stop to
+  `/var/packages/godaddy-ddns/target/var/godaddy-ddns.log`
+  (auto-rotated at 256 KB ≈ 2 weeks of 5-minute checks). Set
+  `LOG_CHECKS="no"` to log only updates and errors.
 
 ## GoDaddy API access
 
@@ -78,6 +80,7 @@ wizard survives upgrades but not uninstalls).
 | `RECORDS` | `@` | Space-separated A-record names (`@` = bare domain) |
 | `TTL` | `600` | Record TTL in seconds (GoDaddy minimum 600) |
 | `CHECK_INTERVAL` | `300` | Seconds between public-IP checks |
+| `LOG_CHECKS` | `yes` | Log every check (`yes`) or only updates/errors (`no`) |
 
 Config survives package upgrades (stashed by `preupgrade`, restored by
 `postinst`). Uninstalling removes everything.

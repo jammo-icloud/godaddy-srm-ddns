@@ -54,8 +54,14 @@ fi
 
 LAST=$(cat "$STATE" 2>/dev/null)
 if [ "$IP" = "$LAST" ] && [ "$1" != "--force" ]; then
+    # LOG_CHECKS=yes (default) writes one line per check even when nothing
+    # changed; set LOG_CHECKS=no in the config for update/error logging only.
+    if [ "${LOG_CHECKS:-yes}" = "yes" ]; then
+        log "check: public IP $IP unchanged, nothing to do"
+    fi
     exit 0
 fi
+log "check: public IP $IP (was ${LAST:-unknown}), updating GoDaddy"
 
 ALL_OK=1
 for rec in $RECORDS; do
