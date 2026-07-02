@@ -51,26 +51,21 @@ Build on macOS/Linux; needs only `tar`, `sed`, `md5`/`md5sum`, `python3`
    (**Production** key, not OTE/test).
 2. In SRM: **Package Center → Settings → Trust Level → Any publisher**.
 3. **Package Center → Manual Install** → upload `dist/godaddy-ddns-<ver>.spk`.
-   Don't start it yet (or start it — it just logs a config error until
-   configured).
-4. SSH to the router (`ssh admin@<router>`, enable SSH first under
-   Control Panel → Services), then:
-
-   ```sh
-   sudo vi /var/packages/godaddy-ddns/target/etc/godaddy-ddns.conf
-   ```
-
-   Set `API_KEY`, `API_SECRET`, `DOMAIN`, and `RECORDS`
-   (e.g. `RECORDS="@ www vpn"`).
-5. Test once by hand and check the result:
+   The install wizard asks for your API key, secret, domain, and records
+   (e.g. `@ www vpn`) — no SSH needed for setup.
+4. Start the package. Done — it now checks every 5 minutes and only calls
+   GoDaddy when your IP actually changes.
+5. (Optional) Verify the first update over SSH:
 
    ```sh
    sudo /var/packages/godaddy-ddns/target/bin/godaddy-ddns.sh --force
    sudo tail /var/packages/godaddy-ddns/target/var/godaddy-ddns.log
    ```
 
-6. Start (or restart) the package in Package Center. Done — it now checks
-   every 5 minutes and only calls GoDaddy when your IP actually changes.
+To change settings later, edit
+`/var/packages/godaddy-ddns/target/etc/godaddy-ddns.conf` over SSH and
+restart the package (or reinstall to re-run the wizard — config from the
+wizard survives upgrades but not uninstalls).
 
 ## Configuration reference
 

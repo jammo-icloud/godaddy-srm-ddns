@@ -1,0 +1,51 @@
+[
+  {
+    "step_title": "GoDaddy DDNS settings",
+    "items": [
+      {
+        "type": "textfield",
+        "desc": "Production API credentials from https://developer.godaddy.com/keys",
+        "subitems": [
+          {
+            "key": "wizard_api_key",
+            "desc": "API Key",
+            "validator": {
+              "allowBlank": false
+            }
+          }
+        ]
+      },
+      {
+        "type": "password",
+        "desc": "",
+        "subitems": [
+          {
+            "key": "wizard_api_secret",
+            "desc": "API Secret",
+            "validator": {
+              "allowBlank": false
+            }
+          }
+        ]
+      },
+      {
+        "type": "textfield",
+        "desc": "The domain whose DNS is hosted at GoDaddy, and which A records to keep updated (space-separated; @ is the bare domain).",
+        "subitems": [
+          {
+            "key": "wizard_domain",
+            "desc": "Domain (e.g. example.com)",
+            "validator": {
+              "allowBlank": false
+            }
+          },
+          {
+            "key": "wizard_records",
+            "desc": "Records",
+            "defaultValue": "@"
+          }
+        ]
+      }
+    ]
+  }
+]

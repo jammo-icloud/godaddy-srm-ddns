@@ -3,7 +3,7 @@
 # Usage: ./build.sh [version]   (default 1.0.0)
 set -e
 
-VERSION="${1:-1.0.0}"
+VERSION="${1:-1.1.0}"
 SRC="$(cd "$(dirname "$0")" && pwd)"
 OUT="$SRC/dist"
 STAGE="$OUT/stage"
@@ -12,7 +12,7 @@ STAGE="$OUT/stage"
 export COPYFILE_DISABLE=1
 
 rm -rf "$STAGE"
-mkdir -p "$STAGE/scripts" "$OUT"
+mkdir -p "$STAGE/scripts" "$STAGE/WIZARD_UIFILES" "$OUT"
 
 # package.tgz: the payload extracted to /var/packages/godaddy-ddns/target
 chmod 755 "$SRC"/package/bin/*.sh
@@ -24,6 +24,7 @@ sed -e "s/@VERSION@/$VERSION/" -e "s/@CHECKSUM@/$CHECKSUM/" "$SRC/INFO.in" > "$S
 
 cp "$SRC"/scripts/* "$STAGE/scripts/"
 chmod 755 "$STAGE"/scripts/*
+cp "$SRC"/WIZARD_UIFILES/* "$STAGE/WIZARD_UIFILES/"
 
 for icon in PACKAGE_ICON.PNG PACKAGE_ICON_256.PNG; do
     [ -f "$SRC/$icon" ] && cp "$SRC/$icon" "$STAGE/$icon"
@@ -31,8 +32,8 @@ done
 
 SPK="$OUT/godaddy-ddns-$VERSION.spk"
 rm -f "$SPK"
-(cd "$STAGE" && tar --exclude '.DS_Store' -cf "$SPK" INFO package.tgz scripts PACKAGE_ICON.PNG PACKAGE_ICON_256.PNG 2>/dev/null \
-    || tar --exclude '.DS_Store' -cf "$SPK" INFO package.tgz scripts)
+(cd "$STAGE" && tar --exclude '.DS_Store' -cf "$SPK" INFO package.tgz scripts WIZARD_UIFILES PACKAGE_ICON.PNG PACKAGE_ICON_256.PNG 2>/dev/null \
+    || tar --exclude '.DS_Store' -cf "$SPK" INFO package.tgz scripts WIZARD_UIFILES)
 
 rm -rf "$STAGE"
 echo "Built $SPK"
