@@ -1,0 +1,10 @@
+#!/bin/sh
+# The target directory is wiped on upgrade - stash the user's config.
+
+PKG_DIR="${SYNOPKG_PKGDEST:-/var/packages/godaddy-ddns/target}"
+
+if [ -f "$PKG_DIR/etc/godaddy-ddns.conf" ]; then
+    cp "$PKG_DIR/etc/godaddy-ddns.conf" /tmp/godaddy-ddns.conf.upgrade
+fi
+
+exit 0

@@ -1,0 +1,36 @@
+#!/bin/sh
+
+PKG_DIR="/var/packages/godaddy-ddns/target"
+PIDFILE="$PKG_DIR/var/godaddy-ddnsd.pid"
+
+daemon_running() {
+    [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null
+}
+
+case "$1" in
+    start)
+        if daemon_running; then
+            exit 0
+        fi
+        mkdir -p "$PKG_DIR/var"
+        "$PKG_DIR/bin/godaddy-ddnsd.sh" >/dev/null 2>&1 &
+        echo $! > "$PIDFILE"
+        exit 0
+        ;;
+    stop)
+        if [ -f "$PIDFILE" ]; then
+            kill "$(cat "$PIDFILE")" 2>/dev/null
+            rm -f "$PIDFILE"
+        fi
+        exit 0
+        ;;
+    status)
+        if daemon_running; then
+            exit 0
+        fi
+        exit 1
+        ;;
+    *)
+        exit 0
+        ;;
+esac

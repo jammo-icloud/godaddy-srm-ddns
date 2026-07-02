@@ -1,0 +1,19 @@
+#!/bin/sh
+# Runs after package.tgz is extracted to $SYNOPKG_PKGDEST.
+
+PKG_DIR="${SYNOPKG_PKGDEST:-/var/packages/godaddy-ddns/target}"
+
+mkdir -p "$PKG_DIR/var"
+chmod 755 "$PKG_DIR/bin/godaddy-ddns.sh" "$PKG_DIR/bin/godaddy-ddnsd.sh"
+
+# Restore config saved by preupgrade, otherwise seed from the default.
+if [ -f /tmp/godaddy-ddns.conf.upgrade ]; then
+    mv -f /tmp/godaddy-ddns.conf.upgrade "$PKG_DIR/etc/godaddy-ddns.conf"
+elif [ ! -f "$PKG_DIR/etc/godaddy-ddns.conf" ]; then
+    cp "$PKG_DIR/etc/godaddy-ddns.conf.default" "$PKG_DIR/etc/godaddy-ddns.conf"
+fi
+
+# Credentials live in this file - keep it root-only.
+chmod 600 "$PKG_DIR/etc/godaddy-ddns.conf"
+
+exit 0
