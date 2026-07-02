@@ -16,17 +16,24 @@ WRX560, any model — the package is `noarch` shell script only).
 - Logs to `/var/packages/godaddy-ddns/target/var/godaddy-ddns.log`
   (auto-rotated at 256 KB).
 
-## ⚠️ GoDaddy API access requirement
+## GoDaddy API access
 
-Since mid-2024 GoDaddy only grants **production** API access to the
-Domains/DNS endpoints for accounts with **10+ domains** or an active Discount
-Domain Club subscription. If your account doesn't qualify, API calls return
-`403 ACCESS_DENIED` and no DDNS client (this one included) can work against
-GoDaddy directly. Common workarounds:
+Per [GoDaddy's API access policy](https://www.godaddy.com/help/how-do-i-access-domain-related-apis-42424),
+any account with **at least one active domain** gets Domains API access with a
+20,000 calls/month limit — vastly more than this package uses, since it only
+calls GoDaddy when the public IP actually changes. (During 2024 GoDaddy
+temporarily restricted the API to large accounts, which older forum threads
+still reference; the current policy above supersedes that.)
 
-- Keep the domain registered at GoDaddy but **delegate DNS to Cloudflare**
-  (free) and use SRM's built-in Cloudflare-compatible DDNS or a similar package.
-- Use a middleman like DNS-O-Matic if it supports your setup.
+Quick sanity check for your credentials before installing (read-only):
+
+```sh
+curl -s -w '\nHTTP %{http_code}\n' \
+  -H "Authorization: sso-key YOUR_KEY:YOUR_SECRET" \
+  "https://api.godaddy.com/v1/domains/yourdomain.com/records/A/@"
+```
+
+HTTP 200 means you're good to go.
 
 ## Build
 
